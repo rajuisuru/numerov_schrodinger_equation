@@ -48,10 +48,3 @@ print("psi[0] =", psi[0])
 print("psi[mid] =", psi[N//2])
 print("psi[end] =", psi[-1])
 
-import matplotlib.pyplot as plt
-
-plt.plot(x, psi)
-plt.xlabel("x")
-plt.ylabel("psi")
-plt.title("Wavefunction from Numerov")
-plt.show()
