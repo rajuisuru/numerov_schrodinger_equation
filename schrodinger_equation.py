@@ -1,17 +1,13 @@
-# numerov_project_final_fixed.py
-# Final project-grade Numerov solver (fixed unpacking bug)
+
 # Systems: infinite well, harmonic oscillator, finite well
-# Features: automatic eigenvalue detection, normalization, plotting,
-#           convergence + error analysis, saved figures.
 # Units: natural units (ħ = 1, m = 1)
 
 import math
 import matplotlib.pyplot as plt
 from time import perf_counter
 
-# ---------------------------
-# Numerov engine (general)
-# ---------------------------
+# Numerov engine 
+
 def numerov(E, x, V):
     """Numerov propagation on grid x for potential V(x).
     Returns:
@@ -41,9 +37,9 @@ def numerov(E, x, V):
 
     return psi, psi[-1]
 
-# ---------------------------
+
 # Root finding: bisection on psi(end)
-# ---------------------------
+
 def find_energy_bisect(x, V, low, high, Niter=40):
     f_low = numerov(low, x, V)[1]
     if abs(f_low) < 1e-14:
@@ -59,9 +55,8 @@ def find_energy_bisect(x, V, low, high, Niter=40):
             f_low = f_mid
     return 0.5*(low + high)
 
-# ---------------------------
 # Scan and bracket eigenvalues then refine
-# ---------------------------
+
 def find_eigenvalues(x, V, E_min, E_max, steps=400):
     energies = []
     E_vals = [E_min + i*(E_max - E_min)/steps for i in range(steps+1)]
@@ -78,9 +73,9 @@ def find_eigenvalues(x, V, E_min, E_max, steps=400):
 
     return energies
 
-# ---------------------------
+
 # Utilities
-# ---------------------------
+
 def create_grid(a, b, N):
     h = (b - a) / N
     return [a + i*h for i in range(N+1)], h
@@ -95,9 +90,8 @@ def save_plot(fig_name):
     plt.savefig(fig_name, dpi=300, bbox_inches="tight")
     print(f"Saved: {fig_name}")
 
-# ---------------------------
 # Potentials
-# ---------------------------
+
 def V_infinite_well(x, L=1.0):
     # inside the grid we use V=0; grid should be restricted to [0,L]
     return 0.0
@@ -112,18 +106,17 @@ def V_finite_well(x, L=1.0, V0=50.0):
     else:
         return 0.0
 
-# ---------------------------
+
 # Analytic energies (for comparison)
-# ---------------------------
+
 def analytic_E_infinite(n, L=1.0):
     return (n*n * math.pi*math.pi) / (2.0 * (L*L))
 
 def analytic_E_harmonic(n):
     return n + 0.5
 
-# ---------------------------
 # Convergence / error helper
-# ---------------------------
+
 def convergence_table_for_known(system_name, run_params, analytic_func, target_ns, N_list):
     print(f"\n=== Convergence & Error Analysis: {system_name} ===")
     # Header
@@ -189,9 +182,9 @@ def convergence_table_for_known(system_name, run_params, analytic_func, target_n
         else:
             print(f"n={n}: not enough data to estimate p")
 
-# ---------------------------
+
 # Grid factories
-# ---------------------------
+
 def grid_infinite_well_factory(L):
     return lambda N: ( [i*(L/N) for i in range(N+1)], L/N )
 
@@ -201,9 +194,9 @@ def grid_harmonic_factory(xmax):
 def grid_finite_well_factory(a,b):
     return lambda N: ( [ a + i*( (b-a)/N ) for i in range(N+1) ], (b-a)/N )
 
-# ---------------------------
+
 # System runners
-# ---------------------------
+
 def run_infinite_well():
     L = 1.0
     print("\n*** INFINITE SQUARE WELL (L=1) ***")
@@ -362,9 +355,9 @@ def run_finite_well():
                 row += f" n{i+1}={E_val:.6f} "
         print(row)
 
-# ---------------------------
+
 # Main
-# ---------------------------
+
 def main():
     t0 = perf_counter()
     run_infinite_well()
